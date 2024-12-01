@@ -12,7 +12,7 @@ namespace Puerto_Rico
         public int Money { get; set; }
         protected Role() { }
 
-        abstract public void action(Game game);
+        abstract public void action(Player player, Game game);
     }
 
     internal class Settler : Role //開拓者
@@ -21,25 +21,30 @@ namespace Puerto_Rico
         {
             Name = "Settler";
         }
-        public override void action(Game game)
+        public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($"  {Name} Action");
             if (game.quarryFields.Count != 0)
             {
-                Console.WriteLine($"{game.players[0].Name} select the QuarryField");
-                game.players[0].FarmList.Add(game.quarryFields[0]);
+                Console.WriteLine($"  {player.Name} select the QuarryField");
+                player.FarmList.Add(game.quarryFields[0]);
                 game.quarryFields.RemoveAt(0);
             }
             else
             {
-                Console.WriteLine($"{game.players[0].Name} select the {game.availableFarms[0].Name}");
-                game.players[0].FarmList.Add(game.availableFarms[0]);
+                Console.WriteLine($"  {player.Name} select the {game.availableFarms[0].Name}");
+                player.FarmList.Add(game.availableFarms[0]);
                 game.availableFarms.RemoveAt(0);
             }
-            for (int i = 1; i < game.players.Count; i++)
+
+            int gamePlayerCount = game.players.Count;
+            int playerIndex = game.players.FindIndex(x => x == player);
+
+            for (int i = 1; i < gamePlayerCount; i++)
             {
-                Console.WriteLine($"{game.players[i].Name} select the {game.availableFarms[0].Name}");
-                game.players[i].FarmList.Add(game.availableFarms[0]);
+                int ii = i + playerIndex > gamePlayerCount - 1 ? i + playerIndex - gamePlayerCount : i + playerIndex;
+                game.players[ii].FarmList.Add(game.availableFarms[0]);
+                Console.WriteLine($"  {game.players[ii].Name} select the {game.availableFarms[0].Name}");
                 game.availableFarms.RemoveAt(0);
             }
             game.availableFarms.Clear();
@@ -51,17 +56,18 @@ namespace Puerto_Rico
     {
         public Mayor()
         {
-            Name = "Mayor";
+            Name = "Mayor  ";
         }
-        public override void action(Game game)
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
+            player.Worker += 1;
         }
     }
     internal class Builder : Role
     {
         public Builder() { Name = "Builder"; }
-        public override void action(Game game)
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
         }
@@ -69,15 +75,15 @@ namespace Puerto_Rico
     internal class Craftsman : Role
     {
         public Craftsman() { Name = "Craftsman"; }
-        public override void action(Game game)
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
         }
     }
     internal class Trader : Role
     {
-        public Trader() { Name = "Trader"; }
-        public override void action(Game game)
+        public Trader() { Name = "Trader "; }
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
         }
@@ -85,23 +91,23 @@ namespace Puerto_Rico
     internal class Captain : Role
     {
         public Captain() { Name = "Captain"; }
-        public override void action(Game game)
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
         }
     }
     internal class Prospector1 : Role
     {
-        public Prospector1() { Name = "Prospector_1"; }
-        public override void action(Game game)
+        public Prospector1() { Name = "Prospecto1"; }
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
         }
     }
     internal class Prospector2 : Role
     {
-        public Prospector2() { Name = "Prospector_2"; }
-        public override void action(Game game)
+        public Prospector2() { Name = "Prospecto2"; }
+        public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
         }

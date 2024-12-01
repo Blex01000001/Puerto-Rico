@@ -10,6 +10,7 @@ namespace Puerto_Rico
     {
         public string Name { get; set; }
         public int Money { get; set; }
+        public int Worker { get; set; }
         public List<Farm> FarmList = new List<Farm>();
         public List<Factory> FactoryList = new List<Factory>();
 

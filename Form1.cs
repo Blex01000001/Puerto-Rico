@@ -14,7 +14,7 @@ namespace Puerto_Rico
     {
         public Form1()
         {
-            
+
             InitializeComponent();
         }
 

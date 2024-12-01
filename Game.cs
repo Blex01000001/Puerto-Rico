@@ -19,11 +19,12 @@ namespace Puerto_Rico
         public List<Farm> quarryFields = new List<Farm>();
         Random rnd = new Random(Guid.NewGuid().GetHashCode());
 
+        public Bank bank = new Bank();
+
         public int playerNum;
         public Goods goods;
         public int MoneyBank;
         public int Score;
-        public int Worker;
 
         public Game(int PlayerNum)
         {
@@ -44,7 +45,7 @@ namespace Puerto_Rico
                     Console.WriteLine($"Player {player.Name} select {availableRoles[0].Name}");
                     player.Money += availableRoles[0].Money;//玩家所選的角色牌上如果有錢就加到玩家裡
                     availableRoles[0].Money = 0;//角色牌所累積的錢歸零
-                    availableRoles[0].action(this);
+                    availableRoles[0].action(player, this);
                     selectedRoles.Add(availableRoles[0]);
                     availableRoles.Remove(availableRoles[0]);
                 }
@@ -60,29 +61,14 @@ namespace Puerto_Rico
                 availableRoles.AddRange(selectedRoles);//將被選過的角色加回去availableRoles
                 selectedRoles.RemoveAll(x => true);
 
-                Console.WriteLine("--------availableRoles status--------");
-                foreach (Role roles in availableRoles)
-                {
-                    Console.WriteLine($"{roles.Name} \t Money: {roles.Money}");
-                }
+                showAvailableRolesStatus();
+                showPlayerStatus();
 
-                Console.WriteLine("--------player status--------");
-                foreach (Player player in players)
-                {
-                    Console.WriteLine($"{player.Name} Money: {player.Money}");
-                    Console.Write($"Farm List: ");
-                    foreach (Farm field in player.FarmList)
-                    {
-                        Console.Write($"{field.Name} ");
-                    }
-                    Console.Write($"\n");
-                }
+                players.Add(players[0]);//將第一人移至最後
+                players.RemoveAt(0);//刪除第一人
 
-                    players.Add(players[0]);//將第一人移至最後
-                    players.RemoveAt(0);//刪除第一人
-
-                    Console.WriteLine("");
-                    Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("");
 
             }
             //SetScore(PlayerNum);
@@ -136,7 +122,7 @@ namespace Puerto_Rico
         }
         private void SetField()
         {
-            
+
             for (int i = 0; i < 8; i++)
             {
                 Farm quarry = new Quarry();
@@ -167,7 +153,7 @@ namespace Puerto_Rico
                 Farm indigo = new Indigo();
                 HideFarms.Add(indigo);
             }
-            
+
         }
 
         private void SetGoods()
@@ -196,7 +182,7 @@ namespace Puerto_Rico
             Role Captain = new Captain();//船長
             availableRoles.Add(Captain);
 
-            switch(playerNum)//探勘者
+            switch (playerNum)//探勘者
             {
                 case 4:
                     Role Prospector41 = new Prospector1();
@@ -216,7 +202,7 @@ namespace Puerto_Rico
             Console.WriteLine("CreatePlayers");
             for (int i = 0; i < playerNum; i++)
             {
-                Player player = new Player(Convert.ToChar(65+i).ToString());
+                Player player = new Player(Convert.ToChar(65 + i).ToString());
                 players.Add(player);
             }
         }
@@ -242,18 +228,45 @@ namespace Puerto_Rico
 
         private void SetWorker(int playerNum)
         {
+            //移民數量：55移民/3人  75移民/4人   95移民/5人
             switch (playerNum)
             {
                 case 3:
-                    Worker = 58;
+                    bank.Worker = 55;
                     break;
                 case 4:
-                    Worker = 79;
+                    bank.Worker = 75;
                     break;
                 case 5:
-                    Worker = 100;
+                    bank.Worker = 95;
                     break;
             }
+        }
+        public void showAvailableRolesStatus()
+        {
+            Console.WriteLine("--------availableRoles status--------");
+            Console.WriteLine($"Role\t\tMoney");
+
+            foreach (Role roles in availableRoles)
+            {
+                Console.WriteLine($"{roles.Name} \t  {roles.Money}");
+            }
+
+        }
+        public void showPlayerStatus()
+        {
+            Console.WriteLine("--------player status--------");
+            Console.WriteLine($"Name \tMoney");
+            foreach (Player player in players)
+            {
+                Console.Write($"{player.Name}    \t  {player.Money}");
+                foreach (Farm field in player.FarmList)
+                {
+                    Console.Write($"\t\t{field.Name} ");
+                }
+                Console.Write($"\n");
+            }
+
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Puerto_Rico
     {
         public Tobacco()
         {
-            Name = "Tobacco";
+            Name = "Tobaco";
         }
     }
     internal class Corn : Farm
