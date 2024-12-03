@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Puerto_Rico
 {
-    internal class Factory
+    internal class Factory : Building
     {
     }
 }

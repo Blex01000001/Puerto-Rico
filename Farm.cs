@@ -6,15 +6,23 @@ using System.Threading.Tasks;
 
 namespace Puerto_Rico
 {
-    abstract class Farm
+    abstract class Building
     {
+        public int worker;
         public string Name;
+        public int MaxWorker;
+    }
+    abstract class Farm : Building
+    {
+        
     }
     internal class Quarry : Farm
     {
         public Quarry()
         {
             Name = "Quarry";
+            worker = 0;
+            MaxWorker = 5;
         }
     }
     internal class Coffee : Farm
@@ -22,6 +30,8 @@ namespace Puerto_Rico
         public Coffee()
         {
             Name = "Coffee";
+            worker = 0; 
+            MaxWorker = 1;
         }
     }
     internal class Tobacco : Farm
@@ -29,6 +39,8 @@ namespace Puerto_Rico
         public Tobacco()
         {
             Name = "Tobaco";
+            worker = 0;
+            MaxWorker = 1;
         }
     }
     internal class Corn : Farm
@@ -36,6 +48,8 @@ namespace Puerto_Rico
         public Corn()
         {
             Name = "Corn";
+            worker = 0;
+            MaxWorker = 1;
         }
     }
     internal class Sugar : Farm
@@ -43,6 +57,8 @@ namespace Puerto_Rico
         public Sugar()
         {
             Name = "Sugar";
+            worker = 0;
+            MaxWorker = 1;
         }
     }
     internal class Indigo : Farm
@@ -50,6 +66,8 @@ namespace Puerto_Rico
         public Indigo()
         {
             Name = "Indigo";
+            worker = 0;
+            MaxWorker = 1;
         }
     }
 

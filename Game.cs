@@ -14,14 +14,18 @@ namespace Puerto_Rico
         public List<Player> players = new List<Player>();//玩家人數List
         public List<Role> availableRoles;//角色List
         public List<Role> selectedRoles = new List<Role>();//角色List
-        public List<Farm> HideFarms = new List<Farm>();
         public List<Farm> availableFarms = new List<Farm>();
+        public List<Farm> HideFarms = new List<Farm>();
+        public List<Farm> TrushFarms = new List<Farm>();
         public List<Farm> quarryFields = new List<Farm>();
-        Random rnd = new Random(Guid.NewGuid().GetHashCode());
+        
+        public Random rnd = new Random(Guid.NewGuid().GetHashCode());
 
         public Bank bank = new Bank();
 
         public int playerNum;
+
+
         public Goods goods;
         public int MoneyBank;
         public int Score;
@@ -31,13 +35,14 @@ namespace Puerto_Rico
             this.playerNum = PlayerNum;
             CreatePlayers(PlayerNum);
             CreateRoles(PlayerNum);
+            SetWorker(PlayerNum);
             SetUp(PlayerNum);
 
             //Console.WriteLine($"players.Count: {players.Count}");
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 30; i++)
             {
-                Console.WriteLine($"==========ROUND {i}==========");
+                Console.WriteLine($"==========ROUND {i+1}==========");
 
                 availableRoles = availableRoles.OrderBy(x => rnd.Next()).ToList();
                 foreach (Player player in players)
@@ -45,12 +50,16 @@ namespace Puerto_Rico
                     Console.WriteLine($"Player {player.Name} select {availableRoles[0].Name}");
                     player.Money += availableRoles[0].Money;//玩家所選的角色牌上如果有錢就加到玩家裡
                     availableRoles[0].Money = 0;//角色牌所累積的錢歸零
+                    //showAvailableFarms();
+                    //showPlayerStatus();
                     availableRoles[0].action(player, this);
+                    //showAvailableFarms();
+                    //showPlayerStatus();
                     selectedRoles.Add(availableRoles[0]);
                     availableRoles.Remove(availableRoles[0]);
                 }
 
-                Console.WriteLine($"==========ROUND {i} END==========");
+                Console.WriteLine($"==========ROUND {i+1} END==========");
 
                 foreach (Role roles in availableRoles)//沒有被選到的角色的錢+1
                 {
@@ -62,6 +71,9 @@ namespace Puerto_Rico
                 selectedRoles.RemoveAll(x => true);
 
                 showAvailableRolesStatus();
+                showAvailableFarms();
+                //showHideFarms();
+                showBankStatus();
                 showPlayerStatus();
 
                 players.Add(players[0]);//將第一人移至最後
@@ -92,33 +104,47 @@ namespace Puerto_Rico
             //4個人遊玩：第1、2家為染料田，第3、4家為玉米田。
             //5個人遊玩：第1、2、3家為染料田，第4、5家為玉米田。
             SetField();
-            players[0].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Indigo)));
-            HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Indigo)));
-            players[1].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Indigo)));
-            HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Indigo)));
+            Farm indigo1 = HideFarms.Find(x => x.GetType() == typeof(Indigo));
+            HideFarms.Remove(indigo1);
+            Farm indigo2 = HideFarms.Find(x => x.GetType() == typeof(Indigo));
+            HideFarms.Remove(indigo2);
+
+            players[0].FarmList.Add(indigo1);
+            players[1].FarmList.Add(indigo2);
+
             switch (playerNum)
             {
                 case 3:
-                    players[2].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Corn)));
+                    Farm corn = HideFarms.Find(x => x.GetType() == typeof(Corn));
+                    HideFarms.Remove(corn);
+                    players[2].FarmList.Add(corn);
                     break;
                 case 4:
-                    players[2].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    players[3].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Corn)));
+                    Farm corn1 = HideFarms.Find(x => x.GetType() == typeof(Corn));
+                    HideFarms.Remove(corn1);
+                    Farm corn2 = HideFarms.Find(x => x.GetType() == typeof(Corn));
+                    HideFarms.Remove(corn2);
+                    players[2].FarmList.Add(corn1);
+                    players[3].FarmList.Add(corn2);
                     break;
                 case 5:
-                    players[2].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Indigo)));
-                    HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Indigo)));
-                    players[3].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    players[4].FarmList.Add(HideFarms.Find(x => x.GetType() == typeof(Corn)));
-                    HideFarms.Remove(HideFarms.Find(x => x.GetType() == typeof(Corn)));
+                    Farm indigo3 = HideFarms.Find(x => x.GetType() == typeof(Indigo));
+                    HideFarms.Remove(indigo3);
+                    Farm corn3 = HideFarms.Find(x => x.GetType() == typeof(Corn));
+                    HideFarms.Remove(corn3);
+                    Farm corn4 = HideFarms.Find(x => x.GetType() == typeof(Corn));
+                    HideFarms.Remove(corn4);
+                    players[2].FarmList.Add(indigo3);
+                    players[3].FarmList.Add(corn3);
+                    players[4].FarmList.Add(corn4);
                     break;
             }
             HideFarms = HideFarms.OrderBy(x => rnd.Next()).ToList();
             availableFarms = HideFarms.Take(playerNum + 1).OrderBy(x => rnd.Next()).ToList();
+            foreach (var item in availableFarms)
+            {
+                HideFarms.Remove(item);
+            }
         }
         private void SetField()
         {
@@ -228,6 +254,7 @@ namespace Puerto_Rico
 
         private void SetWorker(int playerNum)
         {
+            bank.WorkerShip = playerNum;
             //移民數量：55移民/3人  75移民/4人   95移民/5人
             switch (playerNum)
             {
@@ -246,26 +273,90 @@ namespace Puerto_Rico
         {
             Console.WriteLine("--------availableRoles status--------");
             Console.WriteLine($"Role\t\tMoney");
-
             foreach (Role roles in availableRoles)
             {
                 Console.WriteLine($"{roles.Name} \t  {roles.Money}");
             }
-
         }
+        public void showAvailableFarms()
+        {
+            Console.WriteLine("--------availableFarm status--------");
+            Console.WriteLine($"Farm\tWorks");
+            foreach (Farm farm in availableFarms)
+            {
+                Console.WriteLine($"{farm.Name}({farm.GetHashCode()}) \t{farm.worker}");
+            }
+        }
+        public void showHideFarms()
+        {
+            Console.WriteLine("--------hideFarm status--------");
+            Console.WriteLine($"Farm\tWorks");
+            foreach (Farm farm in HideFarms)
+            {
+                Console.WriteLine($"{farm.Name}({farm.GetHashCode()}) \t{farm.worker}");
+            }
+        }
+
+        public void showBankStatus()
+        {
+            Console.WriteLine("--------Bank status--------");
+            Console.WriteLine($"Item\t\t\tQTY");
+
+            Console.WriteLine($"WorkerShip\t\t{bank.WorkerShip}");
+            Console.WriteLine($"Worker\t\t\t{bank.Worker}");
+        }
+
         public void showPlayerStatus()
         {
             Console.WriteLine("--------player status--------");
-            Console.WriteLine($"Name \tMoney");
+            Console.WriteLine($"Name \tMoney \tWorker");
             foreach (Player player in players)
             {
-                Console.Write($"{player.Name}    \t  {player.Money}");
+                Console.Write($"{player.Name}    \t  {player.Money} \t  {player.Worker}");
                 foreach (Farm field in player.FarmList)
                 {
-                    Console.Write($"\t\t{field.Name} ");
+                    Console.Write($"\t\t{field.Name}({field.GetHashCode()}) ({field.worker}/{field.MaxWorker})");
                 }
                 Console.Write($"\n");
             }
+
+        }
+
+        public void ArrangeFarms()
+        {
+            for (int i = 0; i < availableFarms.Count; i++)
+            {
+                TrushFarms.Add(availableFarms[i]);
+                TrushFarms.OrderBy(x => rnd.Next());
+            }
+            availableFarms.Clear();
+
+            while (HideFarms.Count < playerNum + 1)
+            {
+                if (TrushFarms.Count <= 0)
+                    break;
+                foreach (Farm farm in TrushFarms)
+                {
+                    HideFarms.Add(farm);
+                }
+                TrushFarms.Clear();
+            }
+
+            if(HideFarms.Count >= playerNum + 1)
+            {
+                availableFarms = HideFarms.Take(playerNum + 1).ToList();
+            }
+            else
+            {
+                availableFarms = HideFarms.Take(HideFarms.Count).ToList();
+            }
+
+
+            for (int i = 0; i < availableFarms.Count; i++)
+            {
+                HideFarms.Remove(availableFarms[i]);
+            }
+
 
         }
     }
