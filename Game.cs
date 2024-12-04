@@ -40,7 +40,7 @@ namespace Puerto_Rico
 
             //Console.WriteLine($"players.Count: {players.Count}");
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Console.WriteLine($"==========ROUND {i+1}==========");
 
