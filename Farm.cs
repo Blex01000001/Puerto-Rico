@@ -47,7 +47,7 @@ namespace Puerto_Rico
     {
         public Corn()
         {
-            Name = "Corn";
+            Name = "Corn  ";
             worker = 0;
             MaxWorker = 1;
         }
@@ -56,7 +56,7 @@ namespace Puerto_Rico
     {
         public Sugar()
         {
-            Name = "Sugar";
+            Name = "Sugar ";
             worker = 0;
             MaxWorker = 1;
         }

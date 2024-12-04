@@ -9,10 +9,16 @@ namespace Puerto_Rico
 {
     internal class Func
     {
-        static public void shift<T>(T item, List<T> SourceList, List<T> TargetList)
+        static public void shift<T>(T item, List<T> AddToList, List<T> RemoveFromList)
         {
-            TargetList.Add(item);
-            SourceList.Remove(item);
+            AddToList.Add(item);
+            RemoveFromList.Remove(item);
+        }
+
+        static public int RndNum()
+        {
+            Random rnd = new Random(Guid.NewGuid().GetHashCode());
+            return rnd.Next();
         }
     }
 }

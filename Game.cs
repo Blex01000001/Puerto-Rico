@@ -19,8 +19,6 @@ namespace Puerto_Rico
         public List<Farm> TrushFarms = new List<Farm>();
         public List<Farm> quarryFields = new List<Farm>();
         
-        public Random rnd = new Random(Guid.NewGuid().GetHashCode());
-
         public Bank bank = new Bank();
 
         public int playerNum;
@@ -40,11 +38,11 @@ namespace Puerto_Rico
 
             //Console.WriteLine($"players.Count: {players.Count}");
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Console.WriteLine($"==========ROUND {i+1}==========");
 
-                availableRoles = availableRoles.OrderBy(x => rnd.Next()).ToList();
+                availableRoles = availableRoles.OrderBy(x => Func.RndNum()).ToList();
                 foreach (Player player in players)
                 {
                     Console.WriteLine($"Player {player.Name} select {availableRoles[0].Name}");
@@ -99,54 +97,36 @@ namespace Puerto_Rico
                 player.Money += playerNum - 1;
             }
 
+            SetFieldNum();//建立所有農田
             //根據參加人數不同，每個人得到的第一個農田方塊不同：
             //3個人遊玩：第1、2家為染料田，第3家為玉米田。
             //4個人遊玩：第1、2家為染料田，第3、4家為玉米田。
             //5個人遊玩：第1、2、3家為染料田，第4、5家為玉米田。
-            SetField();
-            Farm indigo1 = HideFarms.Find(x => x.GetType() == typeof(Indigo));
-            HideFarms.Remove(indigo1);
-            Farm indigo2 = HideFarms.Find(x => x.GetType() == typeof(Indigo));
-            HideFarms.Remove(indigo2);
-
-            players[0].FarmList.Add(indigo1);
-            players[1].FarmList.Add(indigo2);
-
+            Func.shift(HideFarms.Find(x => x.GetType() == typeof(Indigo)), players[0].FarmList, HideFarms);
+            Func.shift(HideFarms.Find(x => x.GetType() == typeof(Indigo)), players[1].FarmList, HideFarms);
             switch (playerNum)
             {
                 case 3:
-                    Farm corn = HideFarms.Find(x => x.GetType() == typeof(Corn));
-                    HideFarms.Remove(corn);
-                    players[2].FarmList.Add(corn);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), players[2].FarmList, HideFarms);
                     break;
                 case 4:
-                    Farm corn1 = HideFarms.Find(x => x.GetType() == typeof(Corn));
-                    HideFarms.Remove(corn1);
-                    Farm corn2 = HideFarms.Find(x => x.GetType() == typeof(Corn));
-                    HideFarms.Remove(corn2);
-                    players[2].FarmList.Add(corn1);
-                    players[3].FarmList.Add(corn2);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), players[2].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), players[3].FarmList, HideFarms);
                     break;
                 case 5:
-                    Farm indigo3 = HideFarms.Find(x => x.GetType() == typeof(Indigo));
-                    HideFarms.Remove(indigo3);
-                    Farm corn3 = HideFarms.Find(x => x.GetType() == typeof(Corn));
-                    HideFarms.Remove(corn3);
-                    Farm corn4 = HideFarms.Find(x => x.GetType() == typeof(Corn));
-                    HideFarms.Remove(corn4);
-                    players[2].FarmList.Add(indigo3);
-                    players[3].FarmList.Add(corn3);
-                    players[4].FarmList.Add(corn4);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Indigo)), players[2].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), players[3].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), players[4].FarmList, HideFarms);
                     break;
             }
-            HideFarms = HideFarms.OrderBy(x => rnd.Next()).ToList();
-            availableFarms = HideFarms.Take(playerNum + 1).OrderBy(x => rnd.Next()).ToList();
+            HideFarms = HideFarms.OrderBy(x => Func.RndNum()).ToList();
+            availableFarms = HideFarms.Take(playerNum + 1).OrderBy(x => Func.RndNum()).ToList();
             foreach (var item in availableFarms)
             {
                 HideFarms.Remove(item);
             }
         }
-        private void SetField()
+        private void SetFieldNum()
         {
 
             for (int i = 0; i < 8; i++)
@@ -179,7 +159,6 @@ namespace Puerto_Rico
                 Farm indigo = new Indigo();
                 HideFarms.Add(indigo);
             }
-
         }
 
         private void SetGoods()
@@ -327,7 +306,7 @@ namespace Puerto_Rico
             for (int i = 0; i < availableFarms.Count; i++)
             {
                 TrushFarms.Add(availableFarms[i]);
-                TrushFarms.OrderBy(x => rnd.Next());
+                TrushFarms.OrderBy(x => Func.RndNum());
             }
             availableFarms.Clear();
 
