@@ -82,28 +82,21 @@ namespace Puerto_Rico
             for (int i = 0; i < game.bank.WorkerShip; i++)//從市長開始每個人輪流拿工人，拿到移民船上沒有工人
             {
                 int ii = (i % game.playerNum) + playerIndex > (game.playerNum - 1) ? (i % game.playerNum) + playerIndex - game.playerNum : (i % game.playerNum) + playerIndex;
-                //int ii = (i % game.playerNum) > (game.playerNum - 1) ? (i % game.playerNum) + i - game.playerNum : (i % game.playerNum) + i;
                 game.players[ii].Worker += 1;
                 Console.WriteLine($" {game.players[ii].Name} get 1 worker");
             }
             game.bank.WorkerShip = 0;
             int totalPlayerEmptyBuilding = 0;
-            //game.showAvailableFarms();
-            //game.showPlayerStatus();
             foreach (Player p1 in game.players)//所有人必須將得到的移民放在地圖上任何有圈圈的地方（包括農田方塊或者建築物上），而之前部署的任何移民，可以在此時重新部署（但仍然只要有空圈圈且有空間的移民就要部署）
             {
-                //Console.WriteLine($"***{p1.Name}: TURN***");
                 List<Building> BuildingList = p1.getBuildingList();
-                //Console.WriteLine($"***BuildingList.count: {BuildingList.Count}");
                 p1.clearFarmWorker();
                 p1.clearFactoryWorker();
 
                 for (int i = 0; i < p1.Worker; i++)
                 {
-                    //Console.WriteLine($"***{p1.Name}: TURN-2***");
                     if (BuildingList.Count <= 0)
                         break;
-                    //Console.WriteLine($"***{p1.Name}: TURN-3***");
                     BuildingList[0].worker += 1;
                     Console.WriteLine($"  {p1.Name} put 1 worker on {BuildingList[0].Name}({BuildingList[0].GetHashCode()})");
                     BuildingList.RemoveAt(0);
@@ -112,6 +105,11 @@ namespace Puerto_Rico
             }
             game.bank.WorkerShip = totalPlayerEmptyBuilding > game.playerNum ? totalPlayerEmptyBuilding : game.playerNum;
             game.bank.Worker -= game.bank.WorkerShip;
+            if (game.bank.Worker < 0)//移民不夠補充移民船時，則遊戲結束事件發生
+            {
+                Console.WriteLine("\n>>>>移民不夠補充移民船，遊戲將在此輪結束<<<<\n");
+                game.EndGame = true;
+            }
         }
     }
     internal class Builder : Role

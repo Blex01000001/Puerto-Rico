@@ -20,7 +20,7 @@ namespace Puerto_Rico
     {
         public Quarry()
         {
-            Name = "Quarry";
+            Name = "Quarry  ";
             worker = 0;
             MaxWorker = 5;
         }
@@ -29,7 +29,7 @@ namespace Puerto_Rico
     {
         public Coffee()
         {
-            Name = "Coffee";
+            Name = "Coffee  ";
             worker = 0; 
             MaxWorker = 1;
         }
@@ -38,7 +38,7 @@ namespace Puerto_Rico
     {
         public Tobacco()
         {
-            Name = "Tobaco";
+            Name = "Tobacco ";
             worker = 0;
             MaxWorker = 1;
         }
@@ -47,7 +47,7 @@ namespace Puerto_Rico
     {
         public Corn()
         {
-            Name = "Corn  ";
+            Name = "Corn    ";
             worker = 0;
             MaxWorker = 1;
         }
@@ -56,7 +56,7 @@ namespace Puerto_Rico
     {
         public Sugar()
         {
-            Name = "Sugar ";
+            Name = "Sugar   ";
             worker = 0;
             MaxWorker = 1;
         }
@@ -65,7 +65,7 @@ namespace Puerto_Rico
     {
         public Indigo()
         {
-            Name = "Indigo";
+            Name = "Indigo  ";
             worker = 0;
             MaxWorker = 1;
         }

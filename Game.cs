@@ -21,9 +21,10 @@ namespace Puerto_Rico
         
         public Bank bank = new Bank();
 
+
         public int playerNum;
-
-
+        public bool EndGame = false;
+        public int Round = 0;
         public Goods goods;
         public int MoneyBank;
         public int Score;
@@ -37,10 +38,9 @@ namespace Puerto_Rico
             SetUp(PlayerNum);
 
             //Console.WriteLine($"players.Count: {players.Count}");
-
-            for (int i = 0; i < 10; i++)
+            while(!EndGame)
             {
-                Console.WriteLine($"==========ROUND {i+1}==========");
+                Console.WriteLine($"==========ROUND {Round + 1}==========");
 
                 availableRoles = availableRoles.OrderBy(x => Func.RndNum()).ToList();
                 foreach (Player player in players)
@@ -57,7 +57,7 @@ namespace Puerto_Rico
                     availableRoles.Remove(availableRoles[0]);
                 }
 
-                Console.WriteLine($"==========ROUND {i+1} END==========");
+                Console.WriteLine($"==========ROUND {Round + 1} END==========");
 
                 foreach (Role roles in availableRoles)//沒有被選到的角色的錢+1
                 {
@@ -77,16 +77,14 @@ namespace Puerto_Rico
                 players.Add(players[0]);//將第一人移至最後
                 players.RemoveAt(0);//刪除第一人
 
-                Console.WriteLine("");
-                Console.WriteLine("");
-
+                Console.WriteLine("\n");
+                Round++;
             }
             //SetScore(PlayerNum);
             //SetWorker(PlayerNum);
             //SetMoney(PlayerNum);
             //SetMoney(PlayerNum);
             //SetGoods();
-            //
             //SetQuarryfield();
         }
         private void SetUp(int playerNum)
@@ -204,7 +202,7 @@ namespace Puerto_Rico
         }
         private void CreatePlayers(int playerNum)
         {
-            Console.WriteLine("CreatePlayers");
+            //Console.WriteLine("CreatePlayers");
             for (int i = 0; i < playerNum; i++)
             {
                 Player player = new Player(Convert.ToChar(65 + i).ToString());
