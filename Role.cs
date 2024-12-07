@@ -16,10 +16,13 @@ namespace Puerto_Rico
     }
 
     internal class Settler : Role //開拓者
+                                  //選擇開拓者的玩家可以不拿郊區方塊嗎?
+                                  //其他玩家可以不拿郊區方塊嗎?
     {
         public Settler()
         {
             Name = "Settler";
+            Money = 0;
         }
         public override void action(Player player, Game game)
         {
@@ -28,12 +31,14 @@ namespace Puerto_Rico
             {
                 Console.WriteLine($"  {player.Name} select the QuarryField");
                 player.FarmList.Add(game.quarryFields[0]);
+                //player.BuildingList.Add(game.quarryFields[0]);
                 game.quarryFields.Remove(game.quarryFields[0]);
             }
             else if(player.FarmList.Count < 12 && game.availableFarms.Count > 0)
             {
                 Console.WriteLine($"  {player.Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
                 player.FarmList.Add(game.availableFarms[0]);
+                //player.BuildingList.Add(game.availableFarms[0]);
                 game.availableFarms.Remove(game.availableFarms[0]);
             }
             else
@@ -41,8 +46,8 @@ namespace Puerto_Rico
                 Console.WriteLine($"{player.Name} field is full");
             }
 
-            int gamePlayerCount = game.players.Count;
-            int playerIndex = game.players.FindIndex(x => x == player);
+            int gamePlayerCount = Player.list.Count;
+            int playerIndex = Player.list.FindIndex(x => x == player);
 
             for (int i = 1; i < gamePlayerCount; i++)//其他人輪流拿農田
             {
@@ -52,13 +57,14 @@ namespace Puerto_Rico
                     continue;
                 }
                 int ii = i + playerIndex > gamePlayerCount - 1 ? i + playerIndex - gamePlayerCount : i + playerIndex;
-                if (game.players[ii].FarmList.Count >= 12)
+                if (Player.list[ii].FarmList.Count >= 12)
                 {
-                    Console.WriteLine($"{game.players[ii].Name} field is full");
+                    Console.WriteLine($"{Player.list[ii].Name} field is full");
                     continue;
                 }
-                Console.WriteLine($"  {game.players[ii].Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
-                game.players[ii].FarmList.Add(game.availableFarms[0]);
+                Console.WriteLine($"  {Player.list[ii].Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
+                Player.list[ii].FarmList.Add(game.availableFarms[0]);
+                //Player.list[ii].BuildingList.Add(game.availableFarms[0]);
                 game.availableFarms.Remove(game.availableFarms[0]);
             }
 
@@ -71,93 +77,122 @@ namespace Puerto_Rico
         public Mayor()
         {
             Name = "Mayor  ";
+            Money = 0;
         }
         public override void action(Player player, Game game)
         {
             Console.WriteLine($" {Name} Action");
             Console.WriteLine($" {player.Name} get 1 worker(Mayor)");
             game.bank.getWorkerFromBank(player);//市長特權
-            int playerIndex = game.players.FindIndex(x => x == player);
 
+            int playerIndex = Player.list.FindIndex(x => x == player);
             for (int i = 0; i < game.bank.WorkerShip; i++)//從市長開始每個人輪流拿工人，拿到移民船上沒有工人
             {
                 int ii = (i % game.playerNum) + playerIndex > (game.playerNum - 1) ? (i % game.playerNum) + playerIndex - game.playerNum : (i % game.playerNum) + playerIndex;
-                game.players[ii].Worker += 1;
-                Console.WriteLine($" {game.players[ii].Name} get 1 worker");
+                Player.list[ii].Worker += 1;
+                Console.WriteLine($" {Player.list[ii].Name} get 1 worker");
             }
             game.bank.WorkerShip = 0;
-            int totalPlayerEmptyBuilding = 0;
-            foreach (Player p1 in game.players)//所有人必須將得到的移民放在地圖上任何有圈圈的地方（包括農田方塊或者建築物上），而之前部署的任何移民，可以在此時重新部署（但仍然只要有空圈圈且有空間的移民就要部署）
+            int totalPlayerEmptyCircle = 0;
+            foreach (Player p1 in Player.list)//所有人必須將得到的移民放在地圖上任何有圈圈的地方（包括農田方塊或者建築物上），而之前部署的任何移民，可以在此時重新部署（但仍然只要有空圈圈且有空間的移民就要部署）
             {
-                List<Building> BuildingList = p1.getBuildingList();
+                List<Building> EmptyCircleList = p1.getEmptyCircleList();
                 p1.clearFarmWorker();
                 p1.clearFactoryWorker();
 
                 for (int i = 0; i < p1.Worker; i++)
                 {
-                    if (BuildingList.Count <= 0)
+                    if (EmptyCircleList.Count <= 0)
                         break;
-                    BuildingList[0].worker += 1;
-                    Console.WriteLine($"  {p1.Name} put 1 worker on {BuildingList[0].Name}({BuildingList[0].GetHashCode()})");
-                    BuildingList.RemoveAt(0);
+                    EmptyCircleList[0].worker += 1;
+                    Console.WriteLine($"  {p1.Name} put 1 worker on {EmptyCircleList[0].Name}({EmptyCircleList[0].GetHashCode()})");
+                    EmptyCircleList.RemoveAt(0);
                 }
-                totalPlayerEmptyBuilding += BuildingList.Count;
+                totalPlayerEmptyCircle += EmptyCircleList.Count;
             }
-            game.bank.WorkerShip = totalPlayerEmptyBuilding > game.playerNum ? totalPlayerEmptyBuilding : game.playerNum;
+            game.bank.WorkerShip = totalPlayerEmptyCircle > game.playerNum ? totalPlayerEmptyCircle : game.playerNum;
             game.bank.Worker -= game.bank.WorkerShip;
             if (game.bank.Worker < 0)//移民不夠補充移民船時，則遊戲結束事件發生
             {
-                Console.WriteLine("\n>>>>移民不夠補充移民船，遊戲將在此輪結束<<<<\n");
+                Console.WriteLine("\n>>>>移民不夠補充移民船，遊戲將在角色輪轉後結束<<<<\n");
                 game.EndGame = true;
             }
         }
     }
-    internal class Builder : Role
+    internal class Builder : Role //建築師
+        //建築師可以不建嗎?
+        //其他玩家可以不建嗎?
     {
-        public Builder() { Name = "Builder"; }
+        public Builder() { Name = "Builder"; Money = 0; }
         public override void action(Player player, Game game)
         {
             Console.WriteLine($"{Name} Action");
+            int playerIndex = Player.list.FindIndex(x => x == player);
+            for (int i = 0; i < Player.list.Count; i++)//由建築師本身開始，可以依照上下家順序興建一座建築物。建築師可以在興建任何建築物的時候少花一元（最少可以免費；特權）。
+            {
+                int ii = (i % game.playerNum) + playerIndex > (game.playerNum - 1) ? (i % game.playerNum) + playerIndex - game.playerNum : (i % game.playerNum) + playerIndex;
+                //判斷是否可以從availableBuildings買建築，可以就直接買
+                for (int j = 0; j < game.availableBuildings.Count; j++)//逐一檢查每個建築
+                {
+                    if (game.availableBuildings[j].Name == "PassBuilding")//選到PassBuilding代表該玩家pass掉買建築物
+                    {
+                        Console.WriteLine($" {Player.list[ii].Name} does not buy the building");
+                        break;
+                    }
+                    int buildingCost = Func.checkDis(Player.list[ii], game.availableBuildings[j]);
+                    if (buildingCost < 0) //買不起就換下一個建築
+                        continue;
+                    //買得起就直接買
+                    Player.list[ii].BuildingList.Add(game.availableBuildings[j]);
+                    game.availableBuildings.Remove(game.availableBuildings[j]);
+                    //扣錢還給銀行
+                    Player.list[ii].Money -= buildingCost;
+                    game.bank.addMoney(buildingCost);
+                    break;
+                }
+            }
         }
     }
-    internal class Craftsman : Role
+    internal class Craftsman : Role //工匠
     {
-        public Craftsman() { Name = "Craftsman"; }
+        public Craftsman() { Name = "Craftsman"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($" {Name} Action");
         }
     }
     internal class Trader : Role
     {
-        public Trader() { Name = "Trader "; }
+        public Trader() { Name = "Trader "; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($" {Name} Action");
         }
     }
     internal class Captain : Role
     {
-        public Captain() { Name = "Captain"; }
+        public Captain() { Name = "Captain"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($" {Name} Action");
         }
     }
-    internal class Prospector1 : Role
+    internal class Prospector1 : Role //礦工1
     {
-        public Prospector1() { Name = "Prospecto1"; }
+        public Prospector1() { Name = "Prospecto1"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($" {Name} Action");
+            player.GetMoneyFromBank(1);
         }
     }
-    internal class Prospector2 : Role
+    internal class Prospector2 : Role //礦工1
     {
-        public Prospector2() { Name = "Prospecto2"; }
+        public Prospector2() { Name = "Prospecto2"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($" {Name} Action");
+            player.GetMoneyFromBank(1);
         }
     }
 
