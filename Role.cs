@@ -26,24 +26,24 @@ namespace Puerto_Rico
         }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"  {Name} Action");
+            Console.WriteLine($"\t{Name} Action");
             if (game.quarryFields.Count > 0 && player.FarmList.Count < 12)//如果礦場不為零的話就拿礦場
             {
-                Console.WriteLine($"  {player.Name} select the {game.quarryFields[0].Name}({game.quarryFields[0].GetHashCode()}");
+                Console.WriteLine($"\t{player.Name} select the {game.quarryFields[0].Name}({game.quarryFields[0].GetHashCode()}");
                 player.FarmList.Add(game.quarryFields[0]);
                 //player.BuildingList.Add(game.quarryFields[0]);
                 game.quarryFields.Remove(game.quarryFields[0]);
             }
             else if(player.FarmList.Count < 12 && game.availableFarms.Count > 0)
             {
-                Console.WriteLine($"  {player.Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
+                Console.WriteLine($"\t{player.Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
                 player.FarmList.Add(game.availableFarms[0]);
                 //player.BuildingList.Add(game.availableFarms[0]);
                 game.availableFarms.Remove(game.availableFarms[0]);
             }
             else
             {
-                Console.WriteLine($"{player.Name} field is full");
+                Console.WriteLine($"\t{player.Name} field is full");
             }
 
             int gamePlayerCount = Player.list.Count;
@@ -53,16 +53,16 @@ namespace Puerto_Rico
             {
                 if(game.availableFarms.Count <= 0)
                 {
-                    Console.WriteLine("No available Farms");
+                    Console.WriteLine("***No available Farms***");
                     continue;
                 }
                 int ii = i + playerIndex > gamePlayerCount - 1 ? i + playerIndex - gamePlayerCount : i + playerIndex;
                 if (Player.list[ii].FarmList.Count >= 12)
                 {
-                    Console.WriteLine($"{Player.list[ii].Name} field is full");
+                    Console.WriteLine($"***{Player.list[ii].Name} field is full***");
                     continue;
                 }
-                Console.WriteLine($"  {Player.list[ii].Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
+                Console.WriteLine($"\t{Player.list[ii].Name} select the {game.availableFarms[0].Name}({game.availableFarms[0].GetHashCode()})");
                 Player.list[ii].FarmList.Add(game.availableFarms[0]);
                 //Player.list[ii].BuildingList.Add(game.availableFarms[0]);
                 game.availableFarms.Remove(game.availableFarms[0]);
@@ -73,7 +73,7 @@ namespace Puerto_Rico
         }
     }
     internal class Mayor : Role //市長
-    {
+    {//移民不夠補充移民船時，是此次腳色輪轉後結束還是下一回合才結束?
         public Mayor()
         {
             Name = "Mayor  ";
@@ -81,8 +81,8 @@ namespace Puerto_Rico
         }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($" {Name} Action");
-            Console.WriteLine($" {player.Name} get 1 worker(Mayor)");
+            Console.WriteLine($"\t{Name} Action");
+            Console.WriteLine($"\t{player.Name} get 1 worker(Mayor)");
             game.bank.getWorkerFromBank(player);//市長特權
 
             int playerIndex = Player.list.FindIndex(x => x == player);
@@ -90,7 +90,7 @@ namespace Puerto_Rico
             {
                 int ii = (i % game.playerNum) + playerIndex > (game.playerNum - 1) ? (i % game.playerNum) + playerIndex - game.playerNum : (i % game.playerNum) + playerIndex;
                 Player.list[ii].Worker += 1;
-                Console.WriteLine($" {Player.list[ii].Name} get 1 worker");
+                Console.WriteLine($"\t{Player.list[ii].Name} get 1 worker");
             }
             game.bank.WorkerShip = 0;
             int totalPlayerEmptyCircle = 0;
@@ -105,7 +105,7 @@ namespace Puerto_Rico
                     if (EmptyCircleList.Count <= 0)
                         break;
                     EmptyCircleList[0].worker += 1;
-                    Console.WriteLine($"  {p1.Name} put 1 worker on {EmptyCircleList[0].Name}({EmptyCircleList[0].GetHashCode()})");
+                    Console.WriteLine($"\t\t{p1.Name} put 1 worker on {EmptyCircleList[0].Name}({EmptyCircleList[0].GetHashCode()})");
                     EmptyCircleList.RemoveAt(0);
                 }
                 totalPlayerEmptyCircle += EmptyCircleList.Count;
@@ -126,7 +126,7 @@ namespace Puerto_Rico
         public Builder() { Name = "Builder"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($"{Name} Action");
+            Console.WriteLine($"\t{Name} Action");
             int playerIndex = Player.list.FindIndex(x => x == player);
             for (int i = 0; i < Player.list.Count; i++)//由建築師本身開始，可以依照上下家順序興建一座建築物。建築師可以在興建任何建築物的時候少花一元（最少可以免費；特權）。
             {
@@ -136,13 +136,14 @@ namespace Puerto_Rico
                 {
                     if (game.availableBuildings[j].Name == "PassBuilding")//選到PassBuilding代表該玩家pass掉買建築物
                     {
-                        Console.WriteLine($" {Player.list[ii].Name} does not buy the building");
+                        Console.WriteLine($"\t\t{Player.list[ii].Name} PASS buy the building");
                         break;
                     }
                     int buildingCost = Func.checkDis(Player.list[ii], game.availableBuildings[j]);
                     if (buildingCost < 0) //買不起就換下一個建築
                         continue;
                     //買得起就直接買
+                    Console.WriteLine($"\t\t{Player.list[ii].Name} cost {buildingCost} buy the {game.availableBuildings[j].Name}");
                     Player.list[ii].BuildingList.Add(game.availableBuildings[j]);
                     game.availableBuildings.Remove(game.availableBuildings[j]);
                     //扣錢還給銀行
@@ -150,16 +151,17 @@ namespace Puerto_Rico
                     game.bank.addMoney(buildingCost);
                     break;
                 }
+                game.availableBuildings.OrderBy(x => Func.RndNum());
             }
         }
     }
     internal class Craftsman : Role //工匠
-        //工匠特權所獲得的那一個資源是否要等全部人都收成完才能拿? 還是在工匠收成時就可以直接拿?
+    //工匠特權所獲得的那一個資源是否要等全部人都收成完才能拿? 還是在工匠收成時就可以直接拿?
     {
         public Craftsman() { Name = "Craftsman"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($" {Name} Action");
+            Console.WriteLine($"\t{Name} Action");
             int playerIndex = Player.list.FindIndex(x => x == player);
             for (int i = 0; i < Player.list.Count; i++)//所有人從工匠開始，依照上下家次序依序獲得收成。若商品資源已經耗盡，之後的人就拿不到收成了
             {
@@ -171,12 +173,13 @@ namespace Puerto_Rico
                         continue;
                     int getGoodQTY = game.bank.getGoods(good, checkedHarvest);
                     Player.list[ii].Goods.Find(x => x.name == good.name).qty += getGoodQTY;
-                    Console.WriteLine($" {Player.list[ii].Name} get {getGoodQTY} {good.name} from bank");
+                    Console.WriteLine($"\t\t{Player.list[ii].Name} get {getGoodQTY} {good.name} from bank");
                 }
             }
         }
     }
     internal class Trader : Role
+        //
     {
         public Trader() { Name = "Trader "; Money = 0; }
         public override void action(Player player, Game game)
@@ -197,7 +200,7 @@ namespace Puerto_Rico
         public Prospector1() { Name = "Prospecto1"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($" {Name} Action");
+            Console.WriteLine($"\t{Name} Action");
             player.GetMoneyFromBank(1);
         }
     }
@@ -206,7 +209,7 @@ namespace Puerto_Rico
         public Prospector2() { Name = "Prospecto2"; Money = 0; }
         public override void action(Player player, Game game)
         {
-            Console.WriteLine($" {Name} Action");
+            Console.WriteLine($"\t{Name} Action");
             player.GetMoneyFromBank(1);
         }
     }

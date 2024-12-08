@@ -20,7 +20,12 @@ namespace Puerto_Rico
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Game game = new Game(5);
+            Game game = new Game(3);
+            //Game game1 = new Game(5);
+            //Game game2 = new Game(5);
+            //Game game3 = new Game(5);
+            //Game game4 = new Game(5);
+            //Game game5 = new Game(5);
             //Console.WriteLine("game");
         }
     }

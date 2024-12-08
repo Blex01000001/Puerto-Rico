@@ -14,7 +14,7 @@ namespace Puerto_Rico
         [STAThread]
         static void Main()
         {
-            //manhour = 2+1+1+2+2+1+1+2+3.5+3+2+3;
+            //manhour = 2+1+1+2+2+1+1+2+3.5+3+2+6;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

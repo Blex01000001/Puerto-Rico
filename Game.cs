@@ -24,7 +24,6 @@ namespace Puerto_Rico
 
         public Bank bank = new Bank();
 
-
         public int playerNum;
         public bool EndGame = false;
         public int Round = 0;
@@ -59,7 +58,7 @@ namespace Puerto_Rico
                     if (availableRoles[0].Money > 0)//玩家所選的角色牌上如果有錢就加到玩家裡
                     {
                         player.Money += availableRoles[0].Money;
-                        Console.WriteLine($"{player.Name} get {availableRoles[0].Money} money from Role, {player.Name} Sum Money: {player.Money}, Bank: {bank.Money}");
+                        Console.WriteLine($"\t{player.Name} get {availableRoles[0].Money} money from Role, {player.Name} Sum Money: {player.Money}, Bank: {bank.Money}");
                         availableRoles[0].Money = 0;//角色牌所累積的錢歸零
                     }
                     availableRoles[0].action(player, this);
@@ -90,10 +89,6 @@ namespace Puerto_Rico
                 Round++;
             }
             //SetScore(PlayerNum);
-            //SetWorker(PlayerNum);
-            //SetMoney(PlayerNum);
-            
-            //SetQuarryfield();
         }
         private void GameSetUp(int playerNum)
         {
@@ -165,7 +160,7 @@ namespace Puerto_Rico
         }
         private void CreateBuildings()
         {
-            //工廠
+            //生廠廠房
             for (int i = 0; i < 4; i++)
             {
                 IndigoPlant indigoPlant_S = new IndigoPlant(0);
@@ -196,13 +191,78 @@ namespace Puerto_Rico
                 CoffeeRoaster coffeeRoaster = new CoffeeRoaster();
                 availableBuildings.Add(coffeeRoaster);
             }
-            //建築物
-            for (int i = 0; i < 3; i++)
+            //小型特殊功能建築
+            for (int i = 0; i < 2; i++)
             {
                 Smallmarket smallmarket = new Smallmarket(0);
                 availableBuildings.Add(smallmarket);
             }
-
+            for (int i = 0; i < 2; i++)
+            {
+                Largemarket largemarket = new Largemarket(0);
+                availableBuildings.Add(largemarket);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Hacienda hacienda = new Hacienda(0);
+                availableBuildings.Add(hacienda);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Constructionhut constructionhut = new Constructionhut(0);
+                availableBuildings.Add(constructionhut);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Smallwarehouse smallwarehouse = new Smallwarehouse(0);
+                availableBuildings.Add(smallwarehouse);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Largewarehouse largewarehouse = new Largewarehouse(0);
+                availableBuildings.Add(largewarehouse);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Hospice hospice = new Hospice(0);
+                availableBuildings.Add(hospice);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Office office = new Office(0);
+                availableBuildings.Add(office);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Factory factory = new Factory(0);
+                availableBuildings.Add(factory);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                University university = new University(0);
+                availableBuildings.Add(university);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Harbor harbor = new Harbor(0);
+                availableBuildings.Add(harbor);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Wharf wharf = new Wharf(0);
+                availableBuildings.Add(wharf);
+            }
+            //大型特殊功能建築
+            Guildhall guildhall = new Guildhall(0);
+            availableBuildings.Add(guildhall);
+            Residence residence = new Residence(0);
+            availableBuildings.Add(residence);
+            Fortress fortress = new Fortress(0);
+            availableBuildings.Add(fortress);
+            Customshouse customshouse = new Customshouse(0);
+            availableBuildings.Add(customshouse);
+            Cityhall cityhall = new Cityhall(0);
+            availableBuildings.Add(cityhall);
             //空的建築物，當作PASS
             PassBuilding passBuilding = new PassBuilding();
             availableBuildings.Add(passBuilding);
@@ -340,10 +400,10 @@ namespace Puerto_Rico
         public void showPlayerStatus()
         {
             Console.WriteLine("--------player status--------");
-            Console.WriteLine($"Name\tMoney\tWorker\tCorn\tSugar\tCoffee\tTobacco\tIndigo\t");
+            Console.WriteLine($"Name\tScore\tMoney\tWorker\tCorn\tSugar\tCoffee\tTobacco\tIndigo\t");
             foreach (Player player in Player.list)
             {
-                Console.Write($"{player.Name}   \t{player.Money}   \t{player.Worker}    \t{player.Goods[0].qty}   \t{player.Goods[1].qty}    \t{player.Goods[2].qty}     \t{player.Goods[3].qty}      \t{player.Goods[4].qty}\n");
+                Console.Write($"{player.Name}    \t{player.Score}   \t{player.Money}   \t{player.Worker}    \t{player.Goods[0].qty}   \t{player.Goods[1].qty}    \t{player.Goods[2].qty}     \t{player.Goods[3].qty}      \t{player.Goods[4].qty}\n");
             }
             Console.Write("\n");
             Console.Write($"field:\n");

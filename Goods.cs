@@ -18,14 +18,14 @@ namespace Puerto_Rico
             //Goods goods = list.Find(x => x.GetType() = goodType);
             if (good.qty <= 0)
             {
-                Console.WriteLine($"there are no {good.GetType().Name} in the bank, Bank {good.GetType().Name}: {good.qty}");
+                Console.WriteLine($" there are no {good.GetType().Name} in the bank, Bank {good.GetType().Name}: {good.qty}");
                 return 0;
             }
             else if (good.qty < qty)
             {
                 int temp = good.qty;
                 good.qty = 0;
-                Console.WriteLine($"only {temp} {good.GetType().Name} in the bank, Bank {good.GetType().Name}: {good.qty}");
+                Console.WriteLine($" only {temp} {good.GetType().Name} in the bank, Bank {good.GetType().Name}: {good.qty}");
                 return temp;
             }
             good.qty -= qty;

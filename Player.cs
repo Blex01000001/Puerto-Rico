@@ -13,6 +13,7 @@ namespace Puerto_Rico
         public string Name { get; set; }
         public int Money { get; set; }
         public int Worker { get; set; }
+        public int Score { get; set; }
         public List<Goods> Goods = new List<Goods>();
         public string Role;
         public List<Building> FarmList = new List<Building>();
