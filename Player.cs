@@ -13,6 +13,7 @@ namespace Puerto_Rico
         public string Name { get; set; }
         public int Money { get; set; }
         public int Worker { get; set; }
+        public List<Goods> Goods = new List<Goods>();
         public string Role;
         public List<Building> FarmList = new List<Building>();
         //public List<Building> FactoryList = new List<Building>();
@@ -22,6 +23,11 @@ namespace Puerto_Rico
 
         public Player(string name, Game game)
         {
+            Goods.Add(new Corn(0));
+            Goods.Add(new Sugar(0));
+            Goods.Add(new Coffee(0));
+            Goods.Add(new Tobacco(0));
+            Goods.Add(new Indigo(0));
             Player.list.Add(this);
             this.Name = name;
             this.game = game;
@@ -87,5 +93,14 @@ namespace Puerto_Rico
             Console.WriteLine($" {Name} get {getMoney} Money, {Name} Sum Money: {Money}, Bank: {game.bank.Money}");
 
         }
+        public int getFarmWorker(string IndustryType)
+        {
+            return FarmList.Where(x => x.Industry == IndustryType).Where(x => x.worker > 0).Sum(x => x.worker);
+        }
+        public int getBuildingWorker(string IndustryType)
+        {
+            return BuildingList.Where(x => x.Industry == IndustryType).Where(x => x.worker > 0).Sum(x => x.worker);
+        }
+
     }
 }

@@ -29,7 +29,7 @@ namespace Puerto_Rico
             Console.WriteLine($"  {Name} Action");
             if (game.quarryFields.Count > 0 && player.FarmList.Count < 12)//如果礦場不為零的話就拿礦場
             {
-                Console.WriteLine($"  {player.Name} select the QuarryField");
+                Console.WriteLine($"  {player.Name} select the {game.quarryFields[0].Name}({game.quarryFields[0].GetHashCode()}");
                 player.FarmList.Add(game.quarryFields[0]);
                 //player.BuildingList.Add(game.quarryFields[0]);
                 game.quarryFields.Remove(game.quarryFields[0]);
@@ -154,11 +154,26 @@ namespace Puerto_Rico
         }
     }
     internal class Craftsman : Role //工匠
+        //工匠特權所獲得的那一個資源是否要等全部人都收成完才能拿? 還是在工匠收成時就可以直接拿?
     {
         public Craftsman() { Name = "Craftsman"; Money = 0; }
         public override void action(Player player, Game game)
         {
             Console.WriteLine($" {Name} Action");
+            int playerIndex = Player.list.FindIndex(x => x == player);
+            for (int i = 0; i < Player.list.Count; i++)//所有人從工匠開始，依照上下家次序依序獲得收成。若商品資源已經耗盡，之後的人就拿不到收成了
+            {
+                int ii = (i % game.playerNum) + playerIndex > (game.playerNum - 1) ? (i % game.playerNum) + playerIndex - game.playerNum : (i % game.playerNum) + playerIndex;
+                foreach (Goods good in game.bank.GoodList)
+                {
+                    int checkedHarvest = Func.CheckedHarvest(Player.list[ii], good);
+                    if (checkedHarvest <= 0)//小於0代表無法收成
+                        continue;
+                    int getGoodQTY = game.bank.getGoods(good, checkedHarvest);
+                    Player.list[ii].Goods.Find(x => x.name == good.name).qty += getGoodQTY;
+                    Console.WriteLine($" {Player.list[ii].Name} get {getGoodQTY} {good.name} from bank");
+                }
+            }
         }
     }
     internal class Trader : Role

@@ -9,6 +9,7 @@ namespace Puerto_Rico
     abstract class Building
     {
         public string Name;
+        public string Industry;
         public int worker;
         public int MaxWorker;
         public int cost;
@@ -16,56 +17,62 @@ namespace Puerto_Rico
         public int Level;
 
     }
-    internal class Quarry : Building
+    internal class QuarryFarm : Building
     {
-        public Quarry()
+        public QuarryFarm()
         {
             Name = "Quarry  ";
+            Industry = "Quarry";
             worker = 0;
             MaxWorker = 1;
         }
     }
-    internal class Coffee : Building
+    internal class CoffeeFarm : Building
     {
-        public Coffee()
+        public CoffeeFarm()
         {
             Name = "Coffee  ";
+            Industry = "Coffee";
             worker = 0; 
             MaxWorker = 1;
         }
     }
-    internal class Tobacco : Building
+    internal class TobaccoFarm : Building
     {
-        public Tobacco()
+        public TobaccoFarm()
         {
             Name = "Tobacco ";
+            Industry = "Tobacco";
             worker = 0;
             MaxWorker = 1;
         }
     }
-    internal class Corn : Building
+    internal class CornFarm : Building
     {
-        public Corn()
+        public CornFarm()
         {
             Name = "Corn    ";
+            Industry = "Corn";
             worker = 0;
             MaxWorker = 1;
         }
     }
-    internal class Sugar : Building
+    internal class SugarFarm : Building
     {
-        public Sugar()
+        public SugarFarm()
         {
             Name = "Sugar   ";
+            Industry = "Sugar";
             worker = 0;
             MaxWorker = 1;
         }
     }
-    internal class Indigo : Building
+    internal class IndigoFarm : Building
     {
-        public Indigo()
+        public IndigoFarm()
         {
             Name = "Indigo  ";
+            Industry = "Indigo";
             worker = 0;
             MaxWorker = 1;
         }

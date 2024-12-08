@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -25,7 +26,9 @@ namespace Puerto_Rico
         static public int checkDis(Player player, Building building)
         {
             //判斷玩家是否可以買這個建築物(包含打折)，買得起就返回打折後的價格，買不起就返回-1
-            int playerOreWithWorker = player.FarmList.Where(x => x.Name == "Ore").Where(x => x.worker > 0).ToList().Count;
+            if (player.FarmList.Count == 0)
+                return -1;
+            int playerOreWithWorker = player.FarmList.Where(x => x.Name == "Quarry  ").Where(x => x.worker > 0).ToList().Count;
             int playerOreDiscount = 0;
             int playerIsBuilderDiscount = 0;
             for (int i = 1; i < building.Level; i++)//檢查玩家的礦廠可以折幾元
@@ -45,5 +48,27 @@ namespace Puerto_Rico
             return -1;
 
         }
+
+        static public int CheckedHarvest(Player player, Goods good)//小於0代表無法收成
+        {
+            if (good.GetType() == typeof(Corn))
+            {
+               return player.getFarmWorker("Corn");
+            }
+            else
+            {
+                int FarmWorker = player.getFarmWorker(good.GetType().Name);
+                if(FarmWorker <= 0)
+                    return 0;
+                int BuildingWorker = player.getBuildingWorker(good.GetType().Name);
+                return Math.Min(BuildingWorker, FarmWorker);
+            }
+        }
+        //static public Dictionary<Type, Type> TransType = new Dictionary<Type, Type>();
+        //static public void TransToBuildingType()
+        //{
+        //    TransType.Add(typeof(Coffee),typeof(CoffeeFarm));
+        //    TransType.Add(typeof(Coffee), typeof(CoffeeFarm));
+        //}
     }
 }

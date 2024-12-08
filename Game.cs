@@ -28,17 +28,19 @@ namespace Puerto_Rico
         public int playerNum;
         public bool EndGame = false;
         public int Round = 0;
-        public Goods goods;
+        public List<Goods> Goods = new List<Goods>();
         public int MoneyBank;
         public int Score;
 
         public Game(int PlayerNum)
         {
+            //Func.TransToBuildingType();//建立字典
             this.playerNum = PlayerNum;
             bank.moneySetUp();
             CreatePlayers(PlayerNum);
             CreateRoles(PlayerNum);
             SetWorker(PlayerNum);
+            //SetGoods();
             CreateField();//建立所有農田物件
             CreateBuildings();//建立所有廠房、建築物物件
             GameSetUp(PlayerNum);
@@ -90,7 +92,7 @@ namespace Puerto_Rico
             //SetScore(PlayerNum);
             //SetWorker(PlayerNum);
             //SetMoney(PlayerNum);
-            //SetGoods();
+            
             //SetQuarryfield();
         }
         private void GameSetUp(int playerNum)
@@ -104,21 +106,21 @@ namespace Puerto_Rico
             //3個人遊玩：第1、2家為染料田，第3家為玉米田。
             //4個人遊玩：第1、2家為染料田，第3、4家為玉米田。
             //5個人遊玩：第1、2、3家為染料田，第4、5家為玉米田。
-            Func.shift(HideFarms.Find(x => x.GetType() == typeof(Indigo)), Player.list[0].FarmList, HideFarms);
-            Func.shift(HideFarms.Find(x => x.GetType() == typeof(Indigo)), Player.list[1].FarmList, HideFarms);
+            Func.shift(HideFarms.Find(x => x.GetType() == typeof(IndigoFarm)), Player.list[0].FarmList, HideFarms);
+            Func.shift(HideFarms.Find(x => x.GetType() == typeof(IndigoFarm)), Player.list[1].FarmList, HideFarms);
             switch (playerNum)
             {
                 case 3:
-                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), Player.list[2].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(CornFarm)), Player.list[2].FarmList, HideFarms);
                     break;
                 case 4:
-                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), Player.list[2].FarmList, HideFarms);
-                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), Player.list[3].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(CornFarm)), Player.list[2].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(CornFarm)), Player.list[3].FarmList, HideFarms);
                     break;
                 case 5:
-                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Indigo)), Player.list[2].FarmList, HideFarms);
-                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), Player.list[3].FarmList, HideFarms);
-                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(Corn)), Player.list[4].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(IndigoFarm)), Player.list[2].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(CornFarm)), Player.list[3].FarmList, HideFarms);
+                    Func.shift(HideFarms.Find(x => x.GetType() == typeof(CornFarm)), Player.list[4].FarmList, HideFarms);
                     break;
             }
             HideFarms = HideFarms.OrderBy(x => Func.RndNum()).ToList();
@@ -132,57 +134,57 @@ namespace Puerto_Rico
         {
             for (int i = 0; i < 8; i++)
             {
-                Building quarry = new Quarry();
+                Building quarry = new QuarryFarm();
                 quarryFields.Add(quarry);
             }
             for (int i = 0; i < 8; i++)
             {
-                Building coffee = new Coffee();
+                Building coffee = new CoffeeFarm();
                 HideFarms.Add(coffee);
             }
             for (int i = 0; i < 9; i++)
             {
-                Building tobacco = new Tobacco();
+                Building tobacco = new TobaccoFarm();
                 HideFarms.Add(tobacco);
             }
             for (int i = 0; i < 10; i++)
             {
-                Building corn = new Corn();
+                Building corn = new CornFarm();
                 HideFarms.Add(corn);
             }
             for (int i = 0; i < 11; i++)
             {
-                Building sugar = new Sugar();
+                Building sugar = new SugarFarm();
                 HideFarms.Add(sugar);
             }
             for (int i = 0; i < 12; i++)
             {
-                Building indigo = new Indigo();
+                Building indigo = new IndigoFarm();
                 HideFarms.Add(indigo);
             }
         }
         private void CreateBuildings()
         {
             //工廠
-            for (int i = 0; i < 3; i++)
-            {
-                IndigoPlant_B indigoPlant_B = new IndigoPlant_B();
-                availableBuildings.Add(indigoPlant_B);
-            }
             for (int i = 0; i < 4; i++)
             {
-                IndigoPlant_S indigoPlant_S = new IndigoPlant_S();
+                IndigoPlant indigoPlant_S = new IndigoPlant(0);
                 availableBuildings.Add(indigoPlant_S);
             }
             for (int i = 0; i < 3; i++)
             {
-                SugarMill_B sugarMill_B = new SugarMill_B();
-                availableBuildings.Add(sugarMill_B);
+                IndigoPlant indigoPlant_B = new IndigoPlant(1);
+                availableBuildings.Add(indigoPlant_B);
             }
             for (int i = 0; i < 4; i++)
             {
-                SugarMill_S sugarMill_S = new SugarMill_S();
+                SugarMill sugarMill_S = new SugarMill(0);
                 availableBuildings.Add(sugarMill_S);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                SugarMill sugarMill_B = new SugarMill(1);
+                availableBuildings.Add(sugarMill_B);
             }
             for (int i = 0; i < 3; i++)
             {
@@ -197,7 +199,7 @@ namespace Puerto_Rico
             //建築物
             for (int i = 0; i < 3; i++)
             {
-                Smallmarket smallmarket = new Smallmarket();
+                Smallmarket smallmarket = new Smallmarket(0);
                 availableBuildings.Add(smallmarket);
             }
 
@@ -209,7 +211,11 @@ namespace Puerto_Rico
         }
         private void SetGoods()
         {
-            goods = new Goods();
+            Goods.Add(new Corn(10));
+            Goods.Add(new Sugar(11));
+            Goods.Add(new Coffee(9));
+            Goods.Add(new Tobacco(9));
+            Goods.Add(new Indigo(11));
         }
         private void CreateRoles(int playerNum)
         {
@@ -324,15 +330,20 @@ namespace Puerto_Rico
             Console.WriteLine($"WorkerShip\t{bank.WorkerShip}");
             Console.WriteLine($"Worker    \t{bank.Worker}");
             Console.WriteLine($"Money     \t{bank.Money}");
+            Console.WriteLine($"Corn      \t{bank.GoodList[0].qty}");
+            Console.WriteLine($"Sugar     \t{bank.GoodList[1].qty}");
+            Console.WriteLine($"Coffee    \t{bank.GoodList[2].qty}");
+            Console.WriteLine($"Tobacco   \t{bank.GoodList[3].qty}");
+            Console.WriteLine($"Indigo    \t{bank.GoodList[4].qty}");
         }
 
         public void showPlayerStatus()
         {
             Console.WriteLine("--------player status--------");
-            Console.WriteLine($"Name \tMoney \tWorker");
+            Console.WriteLine($"Name\tMoney\tWorker\tCorn\tSugar\tCoffee\tTobacco\tIndigo\t");
             foreach (Player player in Player.list)
             {
-                Console.Write($"{player.Name}    \t  {player.Money} \t  {player.Worker}\n");
+                Console.Write($"{player.Name}   \t{player.Money}   \t{player.Worker}    \t{player.Goods[0].qty}   \t{player.Goods[1].qty}    \t{player.Goods[2].qty}     \t{player.Goods[3].qty}      \t{player.Goods[4].qty}\n");
             }
             Console.Write("\n");
             Console.Write($"field:\n");

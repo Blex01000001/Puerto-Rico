@@ -14,11 +14,23 @@ namespace Puerto_Rico
         public int WorkerShip;
         public int Money { get { return _money; }}
 
-
+        public List<Goods> GoodList { get; }
         private int _money;
 
         public Bank()
         {
+            GoodList = new List<Goods>();
+            Corn corn = new Corn(10);
+            Sugar sugar = new Sugar(11);
+            Coffee coffee = new Coffee(9);
+            Tobacco tobacco = new Tobacco(9);
+            Indigo indigo = new Indigo(11);
+            GoodList.Add(corn);
+            GoodList.Add(sugar);
+            GoodList.Add(coffee);
+            GoodList.Add(tobacco);
+            GoodList.Add(indigo);
+
             Worker = 0;
         }
 
@@ -37,14 +49,15 @@ namespace Puerto_Rico
         {
             if (_money <= 0)
             {
-                Console.WriteLine($"NO MONEY, Bank: {_money}");
+                Console.WriteLine($"Bank NO MONEY, Bank: {_money}");
                 return 0;
             }
-            if (_money < money)
+            else if (_money < money)
             {
+                int temp = _money;
                 _money = 0;
-                Console.WriteLine($"NO MONEY, Bank: {_money}");
-                return _money;
+                Console.WriteLine($"Bank MONEY not enough, Bank: {_money}");
+                return temp;
             }
             _money -= money;
             return money;
@@ -52,6 +65,10 @@ namespace Puerto_Rico
         public void addMoney(int money)
         {
             _money += money;
+        }
+        public int getGoods(Goods good, int qty)
+        {
+            return Goods.getGoods(good, qty);
         }
 
         //public void getWorkerWorkerShip(Player player)

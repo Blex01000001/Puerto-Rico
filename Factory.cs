@@ -9,52 +9,57 @@ namespace Puerto_Rico
     //
     //工廠
     //
-    internal class IndigoPlant_B : Building
+    internal class IndigoPlant : Building
     {
-        public IndigoPlant_B()
+        public IndigoPlant(int type)
         {
-            //Level2
-            Name = "IndigoPlant_B";
-            worker = 0;
-            cost = 3;
-            MaxWorker = 3;
-            Score = 2;
+            if (type == 0)
+            {
+                //Level1
+                Name = "IndigoPlant_Small";
+                Industry = "Indigo";
+                worker = 0;
+                cost = 1;
+                MaxWorker = 1;
+                Score = 1;
+            }else if (type == 1)
+            {
+                //Level2
+                Name = "IndigoPlant_Big";
+                Industry = "Indigo";
+                worker = 0;
+                cost = 3;
+                MaxWorker = 3;
+                Score = 2;
+            }
         }
     }
-    internal class IndigoPlant_S : Building
+    internal class SugarMill : Building
     {
-        public IndigoPlant_S()
+        public SugarMill(int type)
         {
-            //Level1
-            Name = "IndigoPlant_S";
-            worker = 0;
-            cost = 1;
-            MaxWorker = 1;
-            Score = 1;
-        }
-    }
-    internal class SugarMill_B : Building
-    {
-        public SugarMill_B()
-        {
-            //Level2
-            Name = "SugarMill_B";
-            worker = 0;
-            cost = 4;
-            MaxWorker = 3;
-            Score = 2;
-        }
-    }
-    internal class SugarMill_S : Building
-    {
-        public SugarMill_S()
-        {
-            //Level1
-            Name = "SugarMill_S";
-            worker = 0;
-            cost = 2;
-            MaxWorker = 1;
-            Score = 1;
+            if (type == 0)
+            {
+                //Level1
+                Name = "SugarMill_S";
+                Industry = "Sugar";
+                worker = 0;
+                cost = 2;
+                MaxWorker = 1;
+                Score = 1;
+
+            }
+            else if (type == 1)
+            {
+                //Level2
+                Name = "SugarMill_B";
+                Industry = "Sugar";
+                worker = 0;
+                cost = 4;
+                MaxWorker = 3;
+                Score = 2;
+            }
+
         }
     }
     internal class TobaccoStorage : Building
@@ -63,6 +68,7 @@ namespace Puerto_Rico
         {
             //Level3
             Name = "TobaccoStorage";
+            Industry = "Tobacco";
             worker = 0;
             cost = 5;
             MaxWorker = 3;
@@ -75,6 +81,7 @@ namespace Puerto_Rico
         {
             //Level3
             Name = "CoffeeRoaster";
+            Industry = "Coffee";
             worker = 0;
             cost = 6;
             MaxWorker = 2;
@@ -86,10 +93,11 @@ namespace Puerto_Rico
     //
     internal class Smallmarket : Building
     {
-        public Smallmarket()
+        public Smallmarket(int type)
         {
             //Level3
-            Name = "CoffeeRoaster";
+            Name = "Smallmarket";
+            Industry = "";
             worker = 0;
             cost = 1;
             MaxWorker = 1;
