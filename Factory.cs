@@ -129,7 +129,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 2;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -142,7 +142,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 2;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -155,7 +155,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 3;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -168,7 +168,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 6;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -182,7 +182,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 4;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -195,7 +195,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 5;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -208,7 +208,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 7;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -221,7 +221,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 8;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -234,7 +234,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 8;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -247,7 +247,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 9;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -264,7 +264,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 10;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -277,7 +277,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 10;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -290,7 +290,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 10;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -303,7 +303,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 10;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }
@@ -316,7 +316,7 @@ namespace Puerto_Rico
             Industry = "";
             worker = 0;
             cost = 10;
-            MaxWorker = 0;
+            MaxWorker = 1;
             //Score = 0;
         }
     }

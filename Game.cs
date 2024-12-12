@@ -21,13 +21,14 @@ namespace Puerto_Rico
         public List<Building> TrushFarms = new List<Building>();
         public List<Building> quarryFields = new List<Building>();
         public List<Building> availableBuildings = new List<Building>();
+        public List<Goods> Goods = new List<Goods>();
+        public List<Goods> ShopGoods = new List<Goods>();//商店四格商品的空間
 
         public Bank bank = new Bank();
 
         public int playerNum;
         public bool EndGame = false;
         public int Round = 0;
-        public List<Goods> Goods = new List<Goods>();
         public int MoneyBank;
         public int Score;
 
@@ -61,7 +62,7 @@ namespace Puerto_Rico
                         Console.WriteLine($"\t{player.Name} get {availableRoles[0].Money} money from Role, {player.Name} Sum Money: {player.Money}, Bank: {bank.Money}");
                         availableRoles[0].Money = 0;//角色牌所累積的錢歸零
                     }
-                    availableRoles[0].action(player, this);
+                    availableRoles[0].Action(player, this);
                     selectedRoles.Add(availableRoles[0]);
                     availableRoles.Remove(availableRoles[0]);
                 }
@@ -77,14 +78,15 @@ namespace Puerto_Rico
                 availableRoles.AddRange(selectedRoles);//將被選過的角色加回去availableRoles
                 selectedRoles.RemoveAll(x => true);
 
-                showAvailableRolesStatus();
-                showAvailableFarms();
-                //showHideFarms();
-                showBankStatus();
-                showPlayerStatus();
+                ShowAvailableRolesStatus();
+                ShowAvailableFarms();
+                //ShowHideFarms();
+                ShowBankStatus();
+                ShowShopGoods();
+                ShowPlayerStatus();
 
-                Player.nextGovernor();//換下一個人當總督
-                Player.clearPlayerRoles();//清空每個人所選的角色
+                Player.NextGovernor();//換下一個人當總督
+                Player.ClearPlayerRoles();//清空每個人所選的角色
                 Console.WriteLine("\n");
                 Round++;
             }
@@ -354,7 +356,7 @@ namespace Puerto_Rico
                     break;
             }
         }
-        public void showAvailableRolesStatus()
+        public void ShowAvailableRolesStatus()
         {
             Console.WriteLine("--------availableRoles status--------");
             Console.WriteLine($"Role\t\tMoney");
@@ -363,7 +365,7 @@ namespace Puerto_Rico
                 Console.WriteLine($"{roles.Name} \t  {roles.Money}");
             }
         }
-        public void showAvailableFarms()
+        public void ShowAvailableFarms()
         {
             Console.WriteLine("--------availableFarm status--------");
             Console.WriteLine($"Farm\tWorks");
@@ -372,7 +374,7 @@ namespace Puerto_Rico
                 Console.WriteLine($"{farm.Name}({farm.GetHashCode()}) \t{farm.worker}");
             }
         }
-        public void showHideFarms()
+        public void ShowHideFarms()
         {
             Console.WriteLine("--------hideFarm status--------");
             Console.WriteLine($"Farm\tWorks");
@@ -382,7 +384,7 @@ namespace Puerto_Rico
             }
         }
 
-        public void showBankStatus()
+        public void ShowBankStatus()
         {
             Console.WriteLine("--------Bank status--------");
             Console.WriteLine($"Item      \tQTY");
@@ -396,8 +398,18 @@ namespace Puerto_Rico
             Console.WriteLine($"Tobacco   \t{bank.GoodList[3].qty}");
             Console.WriteLine($"Indigo    \t{bank.GoodList[4].qty}");
         }
+        public void ShowShopGoods()
+        {
+            Console.Write($"ShopGoods:\t");
+            foreach (Goods good in ShopGoods)
+            {
+                Console.Write($" {good.name}");
+            }
+            Console.Write($"\n");
 
-        public void showPlayerStatus()
+        }
+
+        public void ShowPlayerStatus()
         {
             Console.WriteLine("--------player status--------");
             Console.WriteLine($"Name\tScore\tMoney\tWorker\tCorn\tSugar\tCoffee\tTobacco\tIndigo\t");
@@ -465,6 +477,15 @@ namespace Puerto_Rico
             }
 
 
+        }
+        public void RndAvailableBuildings()
+        {
+            availableBuildings = availableBuildings.OrderBy(x => Func.RndNum()).ToList();
+        }
+        public void checkShopList()
+        {
+            if(ShopGoods.Count >= 4)
+                ShopGoods.Clear();
         }
     }
 }

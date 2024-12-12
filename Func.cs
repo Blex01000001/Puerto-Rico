@@ -53,14 +53,14 @@ namespace Puerto_Rico
         {
             if (good.GetType() == typeof(Corn))
             {
-               return player.getFarmWorker("Corn");
+               return player.GetFarmWorker("Corn");
             }
             else
             {
-                int FarmWorker = player.getFarmWorker(good.GetType().Name);
+                int FarmWorker = player.GetFarmWorker(good.GetType().Name);
                 if(FarmWorker <= 0)
                     return 0;
-                int BuildingWorker = player.getBuildingWorker(good.GetType().Name);
+                int BuildingWorker = player.GetBuildingWorker(good.GetType().Name);
                 return Math.Min(BuildingWorker, FarmWorker);
             }
         }
@@ -70,5 +70,9 @@ namespace Puerto_Rico
         //    TransType.Add(typeof(Coffee),typeof(CoffeeFarm));
         //    TransType.Add(typeof(Coffee), typeof(CoffeeFarm));
         //}
+        static public bool CheckBuildingWithWorker(Player player, Type buildingType)
+        {
+            return player.GetAllBuildings().Where(x => x.GetType() == buildingType && x.worker > 0).ToList().Count > 0 ? true : false;
+        }
     }
 }
