@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Puerto_Rico
 {
-    internal class Goods
+    public class Goods
     {
         public int qty;
         public string name;

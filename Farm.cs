@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Puerto_Rico
 {
-    abstract class Building
+    public abstract class Building
     {
         public string Name;
         public string Industry;

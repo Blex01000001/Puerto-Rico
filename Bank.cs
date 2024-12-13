@@ -8,7 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Puerto_Rico
 {
-    internal class Bank
+    public class Bank
     {
         public int Worker { get; set; }
         public int WorkerShip;

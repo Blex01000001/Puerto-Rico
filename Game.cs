@@ -10,12 +10,12 @@ using System.Xml.Linq;
 
 namespace Puerto_Rico
 {
-    internal class Game
+    public class Game
     {
         public int PlayerNum;
         //public List<Player> players = new List<Player>();//玩家人數List
-        public List<Role> availableRoles;//角色List
-        public List<Role> selectedRoles = new List<Role>();//角色List
+        public List<RoleAbstract> availableRoles;//角色List
+        public List<RoleAbstract> selectedRoles = new List<RoleAbstract>();//角色List
         public List<Building> availableFarms = new List<Building>();
         public List<Building> HideFarms = new List<Building>();
         public List<Building> TrushFarms = new List<Building>();
@@ -23,6 +23,7 @@ namespace Puerto_Rico
         public List<Building> availableBuildings = new List<Building>();
         public List<Goods> Goods = new List<Goods>();
         public List<Goods> ShopGoods = new List<Goods>();//商店四格商品的空間
+        public List<Ship> ShipList = new List<Ship>();
 
         public Bank bank = new Bank();
 
@@ -40,11 +41,13 @@ namespace Puerto_Rico
             CreatePlayers(PlayerNum);
             CreateRoles(PlayerNum);
             SetWorker(PlayerNum);
+            SetShip(PlayerNum);
             //SetGoods();
             CreateField();//建立所有農田物件
             CreateBuildings();//建立所有廠房、建築物物件
             GameSetUp(PlayerNum);
-            
+
+           
 
             //Console.WriteLine($"players.Count: {players.Count}");
             while (!EndGame)
@@ -69,7 +72,7 @@ namespace Puerto_Rico
 
                 Console.WriteLine($"==========ROUND {Round + 1} END==========");
 
-                foreach (Role roles in availableRoles)//沒有被選到的角色的錢+1
+                foreach (RoleAbstract roles in availableRoles)//沒有被選到的角色的錢+1
                 {
                     Console.WriteLine($"remaining roles: {roles.Name} Money +1");
                     roles.Money += bank.minusMoney(1);
@@ -281,38 +284,37 @@ namespace Puerto_Rico
         }
         private void CreateRoles(int playerNum)
         {
-            availableRoles = new List<Role>();
+            availableRoles = new List<RoleAbstract>();
 
-            Role Settler = new Settler();//開拓者
+            RoleAbstract Settler = new Settler();//開拓者
             availableRoles.Add(Settler);
 
-            Role Mayor = new Mayor();//市長
+            RoleAbstract Mayor = new Mayor();//市長
             availableRoles.Add(Mayor);
 
-            Role Builder = new Builder();//建築師
+            RoleAbstract Builder = new Builder();//建築師
             availableRoles.Add(Builder);
 
-            Role Craftsman = new Craftsman();//工匠
+            RoleAbstract Craftsman = new Craftsman();//工匠
             availableRoles.Add(Craftsman);
 
-            Role Trader = new Trader();//交易商
+            RoleAbstract Trader = new Trader();//交易商
             availableRoles.Add(Trader);
 
-            Role Captain = new Captain();//船長
+            RoleAbstract Captain = new Captain();//船長
             availableRoles.Add(Captain);
 
             switch (playerNum)//探勘者
             {
                 case 4:
-                    Role Prospector41 = new Prospector1();
+                    RoleAbstract Prospector41 = new Prospector();
                     availableRoles.Add(Prospector41);
                     break;
                 case 5:
-                    Role Prospector51 = new Prospector1();
+                    RoleAbstract Prospector51 = new Prospector();
                     availableRoles.Add(Prospector51);
-                    Role Prospector52 = new Prospector2();
+                    RoleAbstract Prospector52 = new Prospector();
                     availableRoles.Add(Prospector52);
-
                     break;
             }
         }
@@ -356,11 +358,31 @@ namespace Puerto_Rico
                     break;
             }
         }
+        private void SetShip(int playerNum)
+        {
+            if(playerNum == 3)
+            {
+                ShipList.Add(new Ship(4));
+                ShipList.Add(new Ship(5));
+                ShipList.Add(new Ship(6));
+            }else if(playerNum == 4)
+            {
+                ShipList.Add(new Ship(5));
+                ShipList.Add(new Ship(6));
+                ShipList.Add(new Ship(7));
+            }
+            else
+            {
+                ShipList.Add(new Ship(6));
+                ShipList.Add(new Ship(7));
+                ShipList.Add(new Ship(8));
+            }
+        }
         public void ShowAvailableRolesStatus()
         {
             Console.WriteLine("--------availableRoles status--------");
             Console.WriteLine($"Role\t\tMoney");
-            foreach (Role roles in availableRoles)
+            foreach (RoleAbstract roles in availableRoles)
             {
                 Console.WriteLine($"{roles.Name} \t  {roles.Money}");
             }

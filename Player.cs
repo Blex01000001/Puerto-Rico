@@ -8,7 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Puerto_Rico
 {
-    internal class Player
+    public class Player
     {
         public string Name { get; set; }
         public int Money { get; set; }
